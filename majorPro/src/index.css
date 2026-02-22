@@ -1,0 +1,9 @@
+@import "tailwindcss";
+/* Force simple colors for PDF */
+.pdf-mode * {
+  background: white !important;
+  color: black !important;
+  border-color: black !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+}
