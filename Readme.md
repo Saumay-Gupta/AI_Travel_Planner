@@ -118,6 +118,26 @@ AI_Itinerary_Planner/
 - npm install
 - npm run dev
 
+### 3️⃣ Environment Variables
+- You need to create separate .env files for both backend and frontend.
+
+##### Backend .env
+- Create a .env file inside the backend folder and add the following:
+
+GEMINI_API_KEY=enter_your_gemini_api_key  
+WEATHER_API_KEY=enter_your_weather_api_key  
+GOOGLE_PLACES_API_KEY=enter_your_google_places_api_key  
+ 
+PORT=5000  
+MONGODB=your_mongodb_connection_string  
+JWT=your_jwt_secret_key  
+
+
+##### Frontend .env
+- Create a .env file inside the frontend folder:
+
+VITE_GOOGLE_MAPS_KEY=enter_your_google_maps_api_key
+
 
 ---
 
