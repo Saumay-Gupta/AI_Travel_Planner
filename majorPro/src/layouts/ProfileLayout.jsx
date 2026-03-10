@@ -80,19 +80,13 @@ function ProfileLayout() {
   const navigate = useNavigate()
   const location = useLocation()
 
-  // ✅ Run session check ONLY ONCE
   useEffect(() => {
     axios
       .get("http://localhost:5000/session_check", { withCredentials: true })
       .then(res => {
-        if (res.data.message !== 'Valid Token') {
-          navigate('/')
-        }
+        if (res.data.message !== 'Valid Token') navigate('/')
       })
-      .catch(() => {
-        console.log("Error in ProfileLayout session check")
-        navigate('/')
-      })
+      .catch(() => navigate('/'))
   }, [navigate])
 
   const isItinerary = location.pathname === "/dashboard"
@@ -105,83 +99,99 @@ function ProfileLayout() {
         {},
         { withCredentials: true }
       )
-
-      if (res.data.message === "Logged out") {
-        navigate('/')
-      }
+      if (res.data.message === "Logged out") navigate('/')
     } catch (error) {
       console.log("Logout error")
     }
   }
 
   return (
-    <div className="relative min-h-screen w-full overflow-hidden">
-      
-      {/* ✅ Background Image */}
-      <img
-        src="/dashboard1.png"
-        alt="dashboard background"
-        className="absolute inset-0 -z-10 h-full w-full object-cover"
-      />
-
-      {/* ✅ Layout */}
-      <div className="flex min-h-screen w-full">
-
-        {/* Sidebar */}
-        <div className="flex w-100 flex-col backdrop-blur-xs border-r border-white/20">
-
+    <div className="flex min-h-screen bg-[#f6f6f8]">
+      {/* ══════════ SIDEBAR ══════════ */}
+      <aside className="hidden md:flex w-72 flex-col border-r border-slate-200 bg-white">
+        {/* Logo */}
+        <div className="flex items-center gap-2 px-6 h-20 border-b border-slate-100">
+          <div className="bg-primary p-1.5 rounded-lg text-white">
+            <span className="material-symbols-outlined text-xl">travel_explore</span>
+          </div>
           <button
             onClick={() => navigate('/')}
-            className="mt-10 text-center text-3xl font-semibold text-white"
+            className="text-lg font-extrabold tracking-tighter text-slate-900 uppercase"
           >
             TRAVELOGIQ
           </button>
+        </div>
 
-          <div className="flex flex-1 flex-col items-center justify-center gap-5">
-
-            <button
-              className={`w-64 rounded-2xl p-2 transition
-              ${isItinerary ? 'bg-white' : 'backdrop-blur-lg border border-white text-white hover:bg-white/30 hover:backdrop-blur-xl hover:shadow-[0_0_20px_rgba(255,255,255,0.35)] hover:scale-[1.03] duration-200'}`}
-              onClick={() => navigate('/dashboard')}
-            >
-              🧾 PREVIOUS ITINERARIES
-            </button>
-
-            <button
-              className={`w-64 rounded-2xl p-2 transition
-              ${isDetails ? 'bg-white' : 
-                'backdrop-blur-lg border border-white text-white hover:bg-white/30 hover:backdrop-blur-xl hover:shadow-[0_0_20px_rgba(255,255,255,0.35)] hover:scale-[1.03] duration-200'
+        {/* Nav links */}
+        <nav className="flex-1 flex flex-col gap-2 p-4">
+          <button
+            onClick={() => navigate('/dashboard')}
+            className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold transition-all ${
+              isItinerary
+                ? 'bg-primary text-white shadow-lg shadow-primary/25'
+                : 'text-slate-600 hover:bg-slate-50 hover:text-primary'
             }`}
-              onClick={() => navigate('/dashboard/details')}
-            >
-              ✈️ CREATE NEW ITINERARY
-            </button>
+          >
+            <span className="material-symbols-outlined text-xl">history</span>
+            Previous Itineraries
+          </button>
 
+          <button
+            onClick={() => navigate('/dashboard/details')}
+            className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-semibold transition-all ${
+              isDetails
+                ? 'bg-primary text-white shadow-lg shadow-primary/25'
+                : 'text-slate-600 hover:bg-slate-50 hover:text-primary'
+            }`}
+          >
+            <span className="material-symbols-outlined text-xl">add_circle</span>
+            Create New Itinerary
+          </button>
+        </nav>
 
-            </div>
-
-            <div className='w-full flex items-center justify-center'>
-                <div className='flex h-px bg-gray-400 w-2/3'></div>
-            </div>
-
-
-            <div className='flex items-center justify-center'>
-                <button
-                    onClick={handleLogout}
-                    className="my-4  h-10 w-30 text-white border border-white rounded-xl hover:text-red-500 transition"
-                    >
-                    ⏻ Logout
-                </button>
-            </div>
-
+        {/* Logout */}
+        <div className="p-4 border-t border-slate-100">
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-3 w-full px-4 py-3 rounded-lg text-sm font-semibold text-slate-500 hover:bg-red-50 hover:text-red-600 transition-all"
+          >
+            <span className="material-symbols-outlined text-xl">logout</span>
+            Logout
+          </button>
         </div>
+      </aside>
 
-        {/* Content */}
-        <div className="flex-1 ">
-          <Outlet />
+      {/* ══════════ MOBILE TOP BAR ══════════ */}
+      <div className="md:hidden fixed top-0 left-0 right-0 z-50 glass-header border-b border-slate-200 h-16 flex items-center justify-between px-4">
+        <div className="flex items-center gap-2">
+          <div className="bg-primary p-1 rounded-lg text-white">
+            <span className="material-symbols-outlined text-lg">travel_explore</span>
+          </div>
+          <span className="text-base font-extrabold tracking-tighter text-slate-900 uppercase">TRAVELOGIQ</span>
         </div>
-
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => navigate('/dashboard')}
+            className={`p-2 rounded-lg ${isItinerary ? 'text-primary' : 'text-slate-500'}`}
+          >
+            <span className="material-symbols-outlined">history</span>
+          </button>
+          <button
+            onClick={() => navigate('/dashboard/details')}
+            className={`p-2 rounded-lg ${isDetails ? 'text-primary' : 'text-slate-500'}`}
+          >
+            <span className="material-symbols-outlined">add_circle</span>
+          </button>
+          <button onClick={handleLogout} className="p-2 rounded-lg text-slate-500 hover:text-red-600">
+            <span className="material-symbols-outlined">logout</span>
+          </button>
+        </div>
       </div>
+
+      {/* ══════════ MAIN CONTENT ══════════ */}
+      <main className="flex-1 md:pt-0 pt-16 overflow-y-auto">
+        <Outlet />
+      </main>
     </div>
   )
 }

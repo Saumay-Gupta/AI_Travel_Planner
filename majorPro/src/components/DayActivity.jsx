@@ -4,9 +4,7 @@ const container = {
   hidden: { opacity: 1 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 1.4
-    },
+    transition: { staggerChildren: 0.8 },
   },
 };
 
@@ -14,57 +12,55 @@ const sentence = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.03,
-    },
+    transition: { staggerChildren: 0.02 },
   },
 };
 
 const letter = {
-  hidden: { opacity: 0, x: 0 },
-  visible: { opacity: 1, x: 5, transition: { duration: 0.9 } },
+  hidden: { opacity: 0, y: 4 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.4 } },
 };
 
 function DayActivity({ day, activities }) {
   return (
-    <div className='w-200 ml-10 mt-10 backdrop-blur-xs bg-white/10 text-white rounded p-4'>
-      <motion.h1
-        className='text-white font-medium ml-2 mb-4 text-xl'
+    <div className="bg-white rounded-xl border border-slate-100 shadow-sm p-6">
+      <motion.h2
+        className="text-lg font-bold text-primary mb-4"
         variants={letter}
         initial="hidden"
         animate="visible"
       >
         {day}
-      </motion.h1>
+      </motion.h2>
 
       <motion.div
         variants={container}
         initial="hidden"
         animate="visible"
+        className="space-y-3"
       >
         {activities.map((activity, index) => (
-          <motion.div 
-            key={index} 
-            className="mb-3 ml-2 text-white flex flex-row items-start"
+          <motion.div
+            key={index}
+            className="flex items-start gap-3"
             variants={sentence}
           >
-            {/* Time Section (Bold) */}
-            <div className="font-bold min-w-[85px] mr-2 text-yellow-300">
-              {activity.time.split("").map((char, charIndex) => (
-                <motion.span key={`time-${charIndex}`} variants={letter}>
-                  {char === " " ? "\u00A0" : char}
+            {/* Time */}
+            <div className="font-bold min-w-[80px] text-sm text-primary">
+              {activity.time.split('').map((char, ci) => (
+                <motion.span key={`t-${ci}`} variants={letter}>
+                  {char === ' ' ? '\u00A0' : char}
                 </motion.span>
               ))}
             </div>
 
-            {/* Separator */}
-            <motion.span variants={letter} className="mr-2">-</motion.span>
+            <span className="text-slate-300">–</span>
 
-            {/* Text Section */}
-            <div className="flex-1">
-              {activity.text.split("").map((char, charIndex) => (
-                <motion.span key={`text-${charIndex}`} variants={letter}>
-                  {char === " " ? "\u00A0" : char}
+            {/* Text */}
+            <div className="flex-1 text-sm text-slate-700">
+              {activity.text.split('').map((char, ci) => (
+                <motion.span key={`x-${ci}`} variants={letter}>
+                  {char === ' ' ? '\u00A0' : char}
                 </motion.span>
               ))}
             </div>

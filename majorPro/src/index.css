@@ -1,5 +1,31 @@
 @import "tailwindcss";
-/* Force simple colors for PDF */
+
+@theme {
+  --color-primary: #5048e5;
+  --color-primary-light: #6c63ff;
+  --color-primary-dark: #3d37b3;
+  --color-bg-light: #f6f6f8;
+  --color-bg-card: #ffffff;
+  --font-family-display: "Inter", sans-serif;
+}
+
+/* ── Base ── */
+body {
+  font-family: var(--font-family-display);
+}
+
+/* ── Glass header ── */
+.glass-header {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* ── Hide scrollbar for gallery ── */
+.hide-scrollbar::-webkit-scrollbar { display: none; }
+.hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ── Force simple colors for PDF ── */
 .pdf-mode * {
   background: white !important;
   color: black !important;

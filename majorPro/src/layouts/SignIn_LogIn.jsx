@@ -1,40 +1,47 @@
 import React from 'react'
-import { Outlet } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 
 function SignIn_LogIn() {
+  const navigate = useNavigate()
+
   return (
-    // 1. Main Wrapper: h-screen/w-screen with overflow-hidden locks the viewport
-    // flex items-center justify-center automatically centers the card
-    <div className='relative h-screen w-screen overflow-hidden flex items-center justify-center'>
-      
-        {/* 2. Background Image Layer */}
-        <div className="absolute inset-0 -z-10">
-            <img
-            src="signIN1.png"
-            alt="homepage background"
-            className="w-full h-full object-cover"
-            />
-            {/* Dark overlay for better text readability */}
-            <div className="absolute inset-0 bg-black/40"></div>
+    <div className="relative min-h-screen w-full flex items-center justify-center bg-[#f6f6f8]">
+      {/* Background */}
+      <div className="absolute inset-0 -z-10">
+        <img
+          src="/signIN1.png"
+          alt="background"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-slate-900/50" />
+      </div>
+
+      {/* Card */}
+      <div className="flex w-full max-w-[920px] mx-4 min-h-[540px] rounded-2xl shadow-2xl overflow-hidden">
+        {/* Left branding panel */}
+        <div className="hidden md:flex w-1/2 flex-col items-center justify-center bg-primary p-10 text-white">
+          <div className="flex items-center gap-2 mb-6">
+            <span className="material-symbols-outlined text-3xl">travel_explore</span>
+            <span className="text-2xl font-extrabold tracking-tighter uppercase">TRAVELOGIQ</span>
+          </div>
+          <h1 className="font-bold text-4xl mb-3 text-center">Welcome</h1>
+          <p className="font-light text-lg tracking-wider text-white/80 text-center">
+            Start Your Journey Here
+          </p>
         </div>
 
-        {/* 3. The Card Container */}
-        {/* Changed w-screen to a fixed max-width or percentage */}
-        {/* Removed margins (mx/mt) because the parent flex handles centering */}
-        <div className='flex w-[900px] h-[550px] shadow-2xl rounded-2xl'> 
-            
-            {/* Left Side: Welcome Text */}
-            <div className='w-1/2 h-full backdrop-blur-md bg-white/10 border border-white/20 text-white flex flex-col items-center justify-center rounded-l-2xl border-r-0'>
-                <h1 className='font-bold text-5xl mb-2'>Welcome</h1>
-                <p className='font-light text-xl tracking-wider'>Start Your Journey Here</p>
-            </div>
-
-            {/* Right Side: Form (Outlet) */}
-            <div className='w-1/2 h-full backdrop-blur-md bg-black/20 border border-white/20 text-white flex flex-col items-center justify-center rounded-r-2xl'>
-                <Outlet/>
-            </div>
-
+        {/* Right form panel */}
+        <div className="w-full md:w-1/2 bg-white flex flex-col items-center justify-center p-8">
+          {/* Mobile-only logo */}
+          <button
+            onClick={() => navigate('/')}
+            className="md:hidden mb-6 text-xl font-extrabold tracking-tighter text-slate-900 uppercase"
+          >
+            TRAVELOGIQ
+          </button>
+          <Outlet />
         </div>
+      </div>
     </div>
   )
 }

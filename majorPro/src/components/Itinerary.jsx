@@ -9,15 +9,12 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 function Itinerary() {
-  const [itineraryText, setItineraryText] = useState(""); 
+  const [itineraryText, setItineraryText] = useState("");
   const [planner, setPlanner] = useState([]);
-  const [loading, setLoading] = useState(true); // ✅ Loader state
-
+  const [loading, setLoading] = useState(true);
   const [itineraryStatus, setItineraryStatus] = useState(1);
-
-
   const navigate = useNavigate();
-  
+
   const [weather, setWeather] = useState({
     destination: "",
     startDate: "",
@@ -25,37 +22,24 @@ function Itinerary() {
     weatherForecast: [],
   });
 
-  // ---------------- FETCH DATA ----------------
+  // ──── FETCH DATA ────
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-
         const itinerary_id = localStorage.getItem('itinerary_id');
 
-        if(itinerary_id){
-          const res = await axios.get(
-            `http://localhost:5000/createItinerary/${itinerary_id}`,
-            { withCredentials: true }
-          );
-  
-          setWeather(res.data.weatherData);
-          setItineraryText(res.data.itinerary);
-        }
-        else{
-          const res = await axios.get(
-            'http://localhost:5000/createItinerary',
-            { withCredentials: true }
-          );
-  
-          setWeather(res.data.weatherData);
-          setItineraryText(res.data.itinerary);
-        }
+        const url = itinerary_id
+          ? `http://localhost:5000/createItinerary/${itinerary_id}`
+          : 'http://localhost:5000/createItinerary';
 
+        const res = await axios.get(url, { withCredentials: true });
+        setWeather(res.data.weatherData);
+        setItineraryText(res.data.itinerary);
       } catch (error) {
         console.log("Frontend Error:", error);
       } finally {
-        setLoading(false); // ✅ Hide loader when done
+        setLoading(false);
       }
     };
 
@@ -63,7 +47,7 @@ function Itinerary() {
     localStorage.removeItem('itinerary_id');
   }, []);
 
-  // // ---------------- PROCESS DATA ----------------
+  // ──── PROCESS DATA ────
   useEffect(() => {
     if (!itineraryText) return;
 
@@ -72,7 +56,6 @@ function Itinerary() {
 
     if (weather) {
       const transformed = transformWeatherData(weather);
-
       setWeather({
         destination: weather.destination || "",
         startDate: weather.startDate || "",
@@ -80,119 +63,120 @@ function Itinerary() {
         weatherForecast: transformed || [],
       });
     }
-
   }, [itineraryText]);
 
   return (
-    <>
-      {/* ---------------- FULL SCREEN LOADER ---------------- */}
+    <div className="min-h-screen bg-[#f6f6f8]">
+      {/* ──── FULL SCREEN LOADER ──── */}
       {loading && (
-        <div className="fixed inset-0 z-60 flex items-center justify-center 
-                        bg-black/90 backdrop-blur-md">
-          <div className="text-white text-2xl font-semibold animate-pulse">
-            Loading your personalized itinerary...
-          </div>
+        <div className="fixed inset-0 z-60 flex flex-col items-center justify-center bg-white">
+          <div className="w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin mb-6" />
+          <p className="text-slate-900 text-xl font-semibold">
+            Crafting your personalized itinerary…
+          </p>
+          <p className="text-slate-500 text-sm mt-2">This may take a moment</p>
         </div>
       )}
 
-
-      {/* ---------------- HEADER SECTION ---------------- */}
-      <div className="fixed top-0 left-0 w-full z-50 
-                      backdrop-blur-md bg-black/40 
-                      border-b border-white/10">
-
-        <div className="mx-4 flex items-center 
-                        justify-between py-4">
-
-          {/* Logo */}
-          <button onClick={() => navigate('/')} className="text-white font-bold tracking-wide hover:text-gray-300 transition">
-            TRAVELOGIQ
-          </button>
-
-          {/* Navigation Links */}
-          <div className="flex items-center gap-8 text-white text-sm font-medium">
-            <button onClick={()=> navigate('/dashboard')} className="hover:text-gray-300 transition">
-              Profile
+      {/* ──── HEADER ──── */}
+      <header className="fixed top-0 left-0 right-0 z-50 glass-header border-b border-primary/10">
+        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <div className="bg-primary p-1.5 rounded-lg text-white">
+              <span className="material-symbols-outlined text-xl">travel_explore</span>
+            </div>
+            <button
+              onClick={() => navigate('/')}
+              className="text-lg font-extrabold tracking-tighter text-slate-900 uppercase"
+            >
+              TRAVELOGIQ
             </button>
           </div>
-        </div>
-      </div>
-
-
-
-
-      {/* ---------------- WEATHER SECTION ---------------- */}
-      <div className='h-1/2 w-full mt-20'>
-        <div className="absolute inset-0 -z-10">
-          <img
-            src="weather1.jpeg"
-            alt="homepage background"
-            className="w-screen h-100 object-cover"
-          />
-          <div className="absolute inset-0 bg-black opacity-30"></div>
-        </div>
-
-        <Weather forecast={weather.weatherForecast} />
-      </div>
-
-
-      {/* ---------------- SELECTION BAR ------------------ */}
-
-      <div className='flex items-center justify-center gap-100 w-full h-20 backdrop-blur-xl bg-black/50'>
-        <button 
-          className={`text-white w-40 text-2xl font-medium p-2 rounded-full hover
-            ${itineraryStatus ? 'bg-orange-500 hover:bg-orange-500' :'hover:bg-orange-400'}
-            trasition duration-300
-            `}
-          onClick={() => setItineraryStatus(1)}
+          <button
+            onClick={() => navigate('/dashboard')}
+            className="text-sm font-semibold text-slate-600 hover:text-primary transition-colors"
           >
-          Itinerary
-        </button> 
-        <button 
-          className={`text-white w-40 text-2xl font-medium p-2 rounded-full hover
-            ${itineraryStatus ? 'hover:bg-orange-400' :'bg-orange-500 hover:bg-orange-500'}
-            trasition duration-300
-            `}
-          onClick={() => setItineraryStatus(0)}
-          >
-          Hotels
-        </button>
-      </div>
+            Dashboard
+          </button>
+        </div>
+      </header>
 
+      <main className="pt-20 pb-16">
+        {/* ──── WEATHER HERO ──── */}
+        <section className="relative overflow-hidden mb-8">
+          <div className="absolute inset-0 -z-10">
+            <img
+              src="/weather1.jpeg"
+              alt="weather background"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-slate-900/30 via-slate-900/10 to-[#f6f6f8]" />
+          </div>
+          <div className="py-16">
+            <Weather forecast={weather.weatherForecast} />
+          </div>
+        </section>
 
-      {/* ---------------- ITINERARY SECTION ---------------- */}
-      { itineraryStatus ? 
-        <div className='flex flex-col w-full backdrop-blur-xl bg-black/50'>
-          <div className='relative w-full flex mt-2 items-center justify-center px-6'>
-            
-            <TravelPlan planner={planner} />
-            
-            
-            <div className="absolute right-6 top-20">
-              <PDFDownloadLink
-                className="flex items-center justify-center w-24 h-10 hover:bg-white/40 
-                          duration-200 rounded-2xl text-white border-2 bg-white/20 backdrop-blur-xs"
-                document={<ItineraryPDF planner={planner} />}
-                fileName="itinerary.pdf"
+        {/* ──── TAB BAR ──── */}
+        <div className="max-w-7xl mx-auto px-6 mb-8">
+          <div className="flex items-center justify-between">
+            <div className="flex bg-white rounded-xl p-1 shadow-sm border border-slate-100">
+              <button
+                className={`px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${
+                  itineraryStatus
+                    ? 'bg-primary text-white shadow-lg shadow-primary/25'
+                    : 'text-slate-500 hover:text-primary'
+                }`}
+                onClick={() => setItineraryStatus(1)}
               >
-                {({ loading }) => loading ? "Preparing..." : "⬇️ PDF"}
-              </PDFDownloadLink>
+                Itinerary
+              </button>
+              <button
+                className={`px-6 py-2.5 rounded-lg text-sm font-bold transition-all ${
+                  !itineraryStatus
+                    ? 'bg-primary text-white shadow-lg shadow-primary/25'
+                    : 'text-slate-500 hover:text-primary'
+                }`}
+                onClick={() => setItineraryStatus(0)}
+              >
+                Hotels
+              </button>
             </div>
-          </div>
 
-        </div> : 
-        <div className='flex flex-col w-full backdrop-blur-xl bg-black/50'>
-          <div className='relative w-full flex mt-2 items-center justify-center px-6'>
-            <h1 className='font-bold text-2xl text-white'>
-              Hotels
-            </h1>
+            {/* PDF Download */}
+            <PDFDownloadLink
+              className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white border border-slate-200 text-slate-700 text-sm font-bold hover:border-primary hover:text-primary shadow-sm transition-all"
+              document={<ItineraryPDF planner={planner} />}
+              fileName="itinerary.pdf"
+            >
+              {({ loading: pdfLoading }) =>
+                pdfLoading ? (
+                  'Preparing…'
+                ) : (
+                  <>
+                    <span className="material-symbols-outlined text-lg">download</span>
+                    Download PDF
+                  </>
+                )
+              }
+            </PDFDownloadLink>
           </div>
-
-          <TravelPlan planner={planner} />
         </div>
-      }
 
-    </>
+        {/* ──── ITINERARY / HOTELS CONTENT ──── */}
+        <div className="max-w-7xl mx-auto px-6">
+          {itineraryStatus ? (
+            <TravelPlan planner={planner} />
+          ) : (
+            <div className="bg-white rounded-xl p-10 border border-slate-100 shadow-sm text-center">
+              <span className="material-symbols-outlined text-5xl text-slate-300 mb-4">hotel</span>
+              <h2 className="text-2xl font-bold text-slate-900">Hotels</h2>
+              <p className="text-slate-500 mt-2">Hotel recommendations coming soon</p>
+            </div>
+          )}
+        </div>
+      </main>
+    </div>
   );
 }
 

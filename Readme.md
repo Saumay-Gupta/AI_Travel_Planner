@@ -6,7 +6,7 @@ An AI-powered travel planning web application built using the **MERN Stack** tha
 
 ## 🎥 Demo Video
 
-🔗 **Watch Demo Here:** (https://drive.google.com/file/d/1tjpysX3JbJN3Fk7aypwcJXVgcG4JKP_H/view?usp=sharing)
+🔗 **Watch Demo Here:** (https://drive.google.com/file/d/1yPfYvQtHsvlN-EDGjMjFZlGZzJSmTeXy/view?usp=sharing)
 
 ---
 
