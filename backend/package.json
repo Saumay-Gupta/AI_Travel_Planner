@@ -6,6 +6,7 @@
   "main": "index2.js",
   "scripts": {
     "start": "node index2.js",
+    "dev": "nodemon index2.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -21,5 +22,8 @@
     "mongoose": "^9.2.1",
     "node-fetch": "^3.3.2",
     "openai": "^6.22.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
   }
 }

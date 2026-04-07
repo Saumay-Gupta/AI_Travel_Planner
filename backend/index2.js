@@ -14,11 +14,10 @@ import getUserItinerary from "./controllers/getUserItinerary.js";
 
 dotenv.config();
 
-connectDB();
 const app = express();
 app.use(express.json());
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: `${process.env.frontend_url}`,
     credentials: true
 }))
 app.use(cookieParser());
@@ -52,6 +51,6 @@ app.delete("/delete_itinerary/:id", verifySession, handleDeleteItinerary);
 app.get("/createItinerary", verifySession , getUserItinerary);
 app.get("/createItinerary/:id", verifySession , getUserItinerary);
 
-app.listen(process.env.PORT, ()=>{
-    console.log("Server Running Properly");
-})
+await connectDB();
+
+export default app;
