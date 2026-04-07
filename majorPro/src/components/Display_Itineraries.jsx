@@ -8,9 +8,12 @@ function Display_Itineraries() {
   const [message, setMessage] = useState('')
 
   useEffect(() => {
+    console.log("Hello1");
     axios
-      .get('http://localhost:5000/getUserItineraries', { withCredentials: true })
+      .get(`${import.meta.env.VITE_API_URL}/getUserItineraries`, { withCredentials: true })
       .then((res) => {
+        console.log("\n2");
+        console.log(res.data);
         setItineraries(res.data)
         if (res.data.length === 0)
           setMessage('Generate Your First Itinerary with us!')
@@ -20,7 +23,7 @@ function Display_Itineraries() {
 
   const handleDeleteItinerary = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/delete_itinerary/${id}`, {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/delete_itinerary/${id}`, {
         withCredentials: true,
       })
       setItineraries((prev) => {
@@ -68,7 +71,7 @@ function Display_Itineraries() {
       ) : (
         /* Itinerary cards grid */
         <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-          {itineraries.map((item) => (
+          {Array.isArray(itineraries) && itineraries.map((item) => (
             <div
               key={item._id}
               className="bg-white rounded-xl shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden group hover:shadow-2xl transition-all duration-300"

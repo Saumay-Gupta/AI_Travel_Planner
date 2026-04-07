@@ -8,7 +8,7 @@ function Details() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/session_check", { withCredentials: true })
+      .get(`${import.meta.env.VITE_API_URL}/session_check`, { withCredentials: true })
       .then((res) => {
         if (res.data.message === "Invalid Token") navigate("/signIn");
       })
@@ -36,7 +36,7 @@ function Details() {
       const data = { destination, to, from, budget, group, interest };
       try {
         const res = await axios.post(
-          "http://localhost:5000/save_details",
+          `${import.meta.env.VITE_API_URL}/save_details`,
           data,
           { withCredentials: true }
         );

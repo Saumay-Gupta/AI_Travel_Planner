@@ -9,7 +9,7 @@ function Home() {
 
   useEffect(() => {
     axios
-      .get('http://localhost:5000/session_check', { withCredentials: true })
+      .get(`${import.meta.env.VITE_API_URL}/session_check`, { withCredentials: true })
       .then((res) => {
         if (res.data.message === 'Valid Token') {
           setHomeText('Generate Your Trip')

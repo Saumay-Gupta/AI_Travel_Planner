@@ -14,7 +14,7 @@ function LogIn() {
     if (password.length < 5) return setMessage('Enter Password Please')
 
     axios
-      .post('http://localhost:5000/login', { email, password }, { withCredentials: true })
+      .post(`${import.meta.env.VITE_API_URL}/login`, { email, password }, { withCredentials: true })
       .then((res) => {
         if (res.data.message === 'User not registered') {
           setMessage('No account found — redirecting to Sign Up…')

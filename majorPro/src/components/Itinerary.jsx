@@ -30,8 +30,8 @@ function Itinerary() {
         const itinerary_id = localStorage.getItem('itinerary_id');
 
         const url = itinerary_id
-          ? `http://localhost:5000/createItinerary/${itinerary_id}`
-          : 'http://localhost:5000/createItinerary';
+          ? `${import.meta.env.VITE_API_URL}/createItinerary/${itinerary_id}`
+          : `${import.meta.env.VITE_API_URL}/createItinerary`;
 
         const res = await axios.get(url, { withCredentials: true });
         setWeather(res.data.weatherData);

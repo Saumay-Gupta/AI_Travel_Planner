@@ -28,7 +28,7 @@ function SignIn() {
 
     if (password === rePassword) {
       axios
-        .post('http://localhost:5000/signUP', { name, email, password }, { withCredentials: true })
+        .post(`${import.meta.env.VITE_API_URL}/signUP`, { name, email, password }, { withCredentials: true })
         .then((res) => {
           if (res.data.message === 'User Created Successfully') {
             setMessage('Account created! Redirecting…')

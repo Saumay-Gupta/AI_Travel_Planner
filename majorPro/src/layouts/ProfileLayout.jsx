@@ -1,77 +1,3 @@
-// import React, { useEffect } from 'react'
-// import { Outlet } from 'react-router-dom'
-// import { useNavigate , useLocation} from 'react-router-dom'
-// import { useState } from 'react';
-// import axios from 'axios';
-// function ProfileLayout() {
-//     const navigate = useNavigate();
-
-//     useEffect(()=>{
-//         axios.get("http://localhost:5000/session_check", {withCredentials: true})
-//         .then(res => {
-//             if(res.data.message !== 'Valid Token') navigate('/') 
-//         })
-//         .catch(err => {
-//             console.log("Error in useEffect in ProfileLayout Page");
-//         })
-//     })
-
-//     const location = useLocation();
-
-//     const isItinerary = location.pathname === "/dashboard";
-//     const isDetails = location.pathname.includes("/dashboard/details");
-
-//     const handleLogout = async () => {
-//         try {
-//             const res = await axios.post('http://localhost:5000/logout', {}, {withCredentials: true});
-//             if(res.data.message == 'Logged out'){
-//                 console.log("Logged Out Successfully");
-//                 navigate('/')
-//             }
-//         } catch (error) {
-//             console.log("Error in handleLogout at frontend");
-//         }
-//     }
-//   return (
-//     <div className='absolute z-10'>
-//         <img src="/dashboard1.png" alt="" />
-//     <div className='flex w-full h-screen overflow-x-hidden'>
-//         <div className='flex flex-col h-screen w-95'>
-//             {/* <div className="absolute inset-0 -z-10 w-95 overflow-hidden">
-//               <img
-//               src="/dashboard1.jpg"
-//               alt="homepage background"
-//               className="h-screen object-cover"
-//               /> */}
-//             {/* </div> */}
-//             <button onClick={(e) => navigate('/')} className='flex justify-center mt-10 font-medium text-3xl'>TRAVELOGIQ</button>
-//             <div className='flex flex-col h-full items-center justify-center'>
-//                 <button
-//                 className={`text-black border-0 w-60 p-2 ${isItinerary ? 'bg-blue-300': 'bg-blue-100'} rounded-2xl ${isItinerary ? 'hover:bg-blue-300': 'hover:bg-blue-200'} duration-150`} 
-//                 onClick={(e) => {
-//                     navigate('/dashboard')
-//                 }}>🧾 PREVIOUS ITINERARIES</button>
-//                 <button 
-//                 className={`text-black border-0 w-60 p-2 ${isDetails ? 'bg-blue-300': 'bg-blue-100'} rounded-2xl mt-5 ${isDetails ? 'hover:bg-blue-300': 'hover:bg-blue-200'} duration-150`} 
-//                 onClick={(e) => {
-//                     navigate('details')
-//                 }}>✈️ CREATE NEW ITINERARY</button>
-
-//             </div>
-//             <div className="w-2/3 mx-auto my-1 h-px bg-gray-600"></div>
-//             <button onClick={handleLogout} className='font-medium my-3 text-gray-600 hover:text-red-500 duration-200'>⏻ Logout</button>
-//         </div>
-//         <div className="flex-1">
-//             <Outlet/>
-//         </div>
-//     </div>
-//     </div>
-//   )
-// }
-
-// export default ProfileLayout
-
-
 import React, { useEffect } from 'react'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import axios from 'axios'
@@ -82,7 +8,7 @@ function ProfileLayout() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/session_check", { withCredentials: true })
+      .get(`${import.meta.env.VITE_API_URL}/session_check`, { withCredentials: true })
       .then(res => {
         if (res.data.message !== 'Valid Token') navigate('/')
       })
@@ -95,7 +21,7 @@ function ProfileLayout() {
   const handleLogout = async () => {
     try {
       const res = await axios.post(
-        "http://localhost:5000/logout",
+        `${import.meta.env.VITE_API_URL}/logout`,
         {},
         { withCredentials: true }
       )
