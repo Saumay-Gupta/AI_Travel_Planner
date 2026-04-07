@@ -17,8 +17,8 @@ const handleLogin = async(req, res)=>{
         
         res.cookie('token', token ,{
             httpOnly: true,
-            secure: false,
-            sameSite: "lax"
+            secure: true,
+            sameSite: "none"
         });
         return res.json({message: 'Successfully LoggedIn'});
     } catch (error) {
