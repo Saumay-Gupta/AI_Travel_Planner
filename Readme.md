@@ -3,6 +3,9 @@
 An AI-powered travel planning web application built using the **MERN Stack** that generates personalized travel itineraries based on user preferences such as travel date, time, and interests (e.g., snow, adventure, relaxation, sightseeing).
 
 ---
+## 🚀 **Live Demo:** (https://ai-travel-planner-zay2.vercel.app/) 
+
+---
 
 ## 🎥 Demo Video
 
