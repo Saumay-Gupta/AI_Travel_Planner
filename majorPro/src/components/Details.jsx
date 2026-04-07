@@ -1,9 +1,17 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import GooglePlacesAutocomplete from "react-google-places-autoComplete";
+import { useLoadScript } from "@react-google-maps/api";
+import { useRef } from "react";
 
 function Details() {
+
+  const { isLoaded } = useLoadScript({
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_API_KEY,
+    libraries: ["places"],
+  });
+
+  const inputRef = useRef();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -14,6 +22,20 @@ function Details() {
       })
       .catch(() => console.log("Error in Details page in Frontend"));
   }, []);
+
+  useEffect(() => {
+    if (!isLoaded || !inputRef.current) return;
+
+    const autocomplete = new window.google.maps.places.Autocomplete(
+      inputRef.current
+    );
+
+    autocomplete.addListener("place_changed", () => {
+      const place = autocomplete.getPlace();
+      setDestination(place.formatted_address || place.name);
+    });
+
+  }, [isLoaded]);
 
   let [destination, setDestination] = useState(null);
   let [to, setTo] = useState("");
@@ -26,14 +48,14 @@ function Details() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    destination = destination?.label;
-    if (!destination || !to || !from || !budget || !group || !interest) {
+    const finalDestination = destination;
+    if (!destination || !to || !from || !budget || !group || interest.length === 0) {
       setWarning("Fill out all the details!");
     } else if (to > from) {
       setWarning("Enter Correct Order of Dates");
     } else {
       setLoading(true);
-      const data = { destination, to, from, budget, group, interest };
+      const data = { destination: finalDestination, to, from, budget, group, interest };
       try {
         const res = await axios.post(
           `${import.meta.env.VITE_API_URL}/save_details`,
@@ -99,7 +121,7 @@ function Details() {
 
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Destination */}
-          <div>
+          {/* <div>
             <label className="block text-sm font-semibold text-slate-700 mb-2">
               Destination
             </label>
@@ -139,8 +161,23 @@ function Details() {
                 },
               }}
             />
-          </div>
+          </div> */}
+          <div>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">
+                Destination
+              </label>
 
+              {!isLoaded ? (
+                <p>Loading...</p>
+              ) : (
+                <input
+                  ref={inputRef}
+                  type="text"
+                  placeholder="Ex. Manali"
+                  className="w-full px-4 py-3 rounded-lg border border-slate-200 bg-slate-50 text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary/40 transition"
+                />
+              )}
+            </div>
           {/* Dates */}
           <div>
             <label className="block text-sm font-semibold text-slate-700 mb-2">
